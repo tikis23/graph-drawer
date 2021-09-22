@@ -14,7 +14,6 @@ imgui.ini
 *.sln.docstates
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-[Dd]ependencies/
 
 # Build results
 **[Dd]ebug/*
