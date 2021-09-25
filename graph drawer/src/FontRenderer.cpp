@@ -7,14 +7,14 @@ void FontRenderer::Setup(Shader* switchBackShader)
 	switchBackProgram = switchBackShader;
 	fontProgram = new Shader;
 	fontProgram->LoadShaders("Font", "res/shaders/font.vs", "res/shaders/font.fs");
-	glGenBuffersARB(1, &VBO);
+	glGenBuffers(1, &VBO);
 	fontTexture = LoadTexture("res/fonts/FontDefault.bmp");
 }
 
 void FontRenderer::Exit()
 {
 	delete fontProgram;
-	glDeleteBuffersARB(1, &VBO);
+	glDeleteBuffers(1, &VBO);
 }
 
 void FontRenderer::Draw(std::string value, int x, int y, int offset, float color_r, float color_g, float color_b)
@@ -86,16 +86,16 @@ void FontRenderer::Render(int w_sizex, int w_sizey)
 {
 	if (data.size() > 0)
 	{
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, VBO);
-		glBufferDataARB(GL_ARRAY_BUFFER_ARB, data.size() * sizeof(fontData), &data[0], GL_STATIC_DRAW_ARB);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(fontData), &data[0], GL_STATIC_DRAW);
 
-		glVertexAttribPointerARB(0, 4, GL_FLOAT, GL_FALSE, sizeof(fontData), (void*)offsetof(fontData, position));
-		glEnableVertexAttribArrayARB(0);
-		glVertexAttribPointerARB(1, 3, GL_FLOAT, GL_FALSE, sizeof(fontData), (void*)offsetof(fontData, color));
-		glEnableVertexAttribArrayARB(1);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(fontData), (void*)offsetof(fontData, position));
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(fontData), (void*)offsetof(fontData, color));
+		glEnableVertexAttribArray(1);
 
 		fontProgram->Use();
-		glActiveTextureARB(GL_TEXTURE0_ARB + 0);
+		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, fontTexture);
 		fontProgram->setUniform1i("fontTexture", 0);
 		fontProgram->setUniform2f("u_windowSize", w_sizex, w_sizey);

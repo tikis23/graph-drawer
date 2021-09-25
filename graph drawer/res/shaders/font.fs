@@ -1,11 +1,9 @@
-#version 110
-#extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_separate_shader_objects : enable
+#version 330 core
 
-layout(location = 0) varying out vec4 out_color;
+layout(location = 0) out vec4 out_color;
        
-varying in vec3 color;
-varying in vec2 texPos;
+in vec3 color;
+in vec2 texPos;
 
 uniform sampler2D fontTexture;
 

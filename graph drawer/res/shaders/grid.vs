@@ -1,8 +1,6 @@
-#version 110
-#extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_separate_shader_objects : enable
+#version 330 core
 
-layout(location = 0) varying in vec2 in_position;
+layout(location = 0) in vec2 in_position;
 
 uniform vec2 u_windowSize;
 

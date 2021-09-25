@@ -34,7 +34,7 @@ void GraphDrawer::loop()
         throw std::invalid_argument("Could not init GLFW\n");
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
     
 
     // create window

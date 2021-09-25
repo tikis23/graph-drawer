@@ -226,7 +226,7 @@ Renderer::~Renderer()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
-	glDeleteBuffersARB(1, &grid_VBO);
+	glDeleteBuffers(1, &grid_VBO);
 }
 
 void Renderer::InitShaders()
@@ -237,7 +237,7 @@ void Renderer::InitShaders()
 
 	gridShader = new Shader;
 	gridShader->LoadShaders("grid", "res/shaders/grid.vs", "res/shaders/grid.fs");
-	glGenBuffersARB(1, &grid_VBO);
+	glGenBuffers(1, &grid_VBO);
 }
 
 void Renderer::Draw()
@@ -326,11 +326,11 @@ void Renderer::Draw()
 					imgui_settings_menu();
 					ImGui::EndTabItem();
 				}
-				if (ImGui::BeginTabItem("Style"))
-				{
-					theme_generator();
-					ImGui::EndTabItem();
-				}
+				//if (ImGui::BeginTabItem("Style"))
+				//{
+				//	theme_generator();
+				//	ImGui::EndTabItem();
+				//}
 				ImGui::EndTabBar();
 			}
 
@@ -349,7 +349,7 @@ void Renderer::Draw()
 	FontRenderer::SetScale(fontScale[0], fontScale[1]);
 
 	// check for updates
-	if (origin_x / w_sizex != origin_buffer || pow(10, ((int)scale[0] / 10)) != scale_buffer[0] || pow(10, ((int)scale[1] / 10)) != scale_buffer[1])
+	if (origin_x / w_sizex != origin_buffer || powf(10, ((int)scale[0] / 10)) != scale_buffer[0] || powf(10, ((int)scale[1] / 10)) != scale_buffer[1])
 		for (auto& it : graphs)
 			it.update = true;
 	scale_buffer[0] = powf(10, ((int)scale[0] / 10));
@@ -379,7 +379,7 @@ void Renderer::Draw()
 		float gx, x0 = 0, x1 = w_sizex * 6;
 		gx = log10(x1 - x0);
 		gx = floor(gx - 1); 
-		gx = pow(10, gx);
+		gx = powf(10, gx);
 		int normalized_origin_x = origin_x % w_sizex;
 		normalized_origin_x *= (scale[0] - ((int)scale[0] / 10) * 10 + 1);
 		if(gx > 0.5)
@@ -420,22 +420,22 @@ void Renderer::Draw()
 			}
 		if (data.size() > 0)
 		{
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, grid_VBO);
-			glBufferDataARB(GL_ARRAY_BUFFER_ARB, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW_ARB);
-			glVertexAttribPointerARB(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
-			glEnableVertexAttribArrayARB(0);
+			glBindBuffer(GL_ARRAY_BUFFER, grid_VBO);
+			glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW);
+			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
+			glEnableVertexAttribArray(0);
 			gridShader->setUniform2f("u_windowSize", w_sizex, w_sizey);
 			gridShader->setUniform3f("u_color", grid_color[0], grid_color[1], grid_color[2]);
 			glDrawArrays(GL_LINES, 0, data.size());
 			if (fatLine_data.size() > 0)
 			{
-				glBufferDataARB(GL_ARRAY_BUFFER_ARB, fatLine_data.size() * sizeof(float), &fatLine_data[0], GL_STATIC_DRAW_ARB);
-				glVertexAttribPointerARB(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
-				glEnableVertexAttribArrayARB(0);
+				glBufferData(GL_ARRAY_BUFFER, fatLine_data.size() * sizeof(float), &fatLine_data[0], GL_STATIC_DRAW);
+				glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
+				glEnableVertexAttribArray(0);
 				gridShader->setUniform3f("u_color", grid_color[0] * 2.f, grid_color[1] * 2.f, grid_color[2] * 2.f);
 				glDrawArrays(GL_QUADS, 0, fatLine_data.size());
 			}
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 		// horizontal
 		data.clear();
@@ -485,21 +485,21 @@ void Renderer::Draw()
 			}
 		if (data.size() > 0)
 		{
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, grid_VBO);
-			glBufferDataARB(GL_ARRAY_BUFFER_ARB, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW_ARB);
-			glVertexAttribPointerARB(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
+			glBindBuffer(GL_ARRAY_BUFFER, grid_VBO);
+			glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW);
+			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
 			gridShader->setUniform2f("u_windowSize", w_sizex, w_sizey);
 			gridShader->setUniform3f("u_color", grid_color[0], grid_color[1], grid_color[2]);
 			glDrawArrays(GL_LINES, 0, data.size());
 			if (fatLine_data.size() > 0)
 			{
-				glBufferDataARB(GL_ARRAY_BUFFER_ARB, fatLine_data.size() * sizeof(float), &fatLine_data[0], GL_STATIC_DRAW_ARB);
-				glVertexAttribPointerARB(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
-				glEnableVertexAttribArrayARB(0);
+				glBufferData(GL_ARRAY_BUFFER, fatLine_data.size() * sizeof(float), &fatLine_data[0], GL_STATIC_DRAW);
+				glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
+				glEnableVertexAttribArray(0);
 				gridShader->setUniform3f("u_color", grid_color[0] * 2.f, grid_color[1] * 2.f, grid_color[2] * 2.f);
 				glDrawArrays(GL_QUADS, 0, fatLine_data.size());
 			}
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 	}
 	
@@ -534,20 +534,28 @@ void Renderer::Draw()
 				it.data.erase(it.data.begin(), it.data.begin() + 2);
 				it.data.pop_back();
 				it.data.pop_back();
-				glBindBufferARB(GL_ARRAY_BUFFER_ARB, it.VBO);
-				glBufferDataARB(GL_ARRAY_BUFFER_ARB, it.data.size() * sizeof(float), &it.data[0], GL_STATIC_DRAW_ARB);
+				glBindBuffer(GL_ARRAY_BUFFER, it.VBO);
+				glBufferData(GL_ARRAY_BUFFER, it.data.size() * sizeof(float), &it.data[0], GL_STATIC_DRAW);
 				it.draw_size = it.data.size();
 				it.data.clear();
 				it.update = false;
-				it.in_progress = false;
 				it.finished = false;
+			}
+			else if (it.data.size() == 0 && it.finished)
+			{
+				glBindBuffer(GL_ARRAY_BUFFER, it.VBO);
+				glBufferData(GL_ARRAY_BUFFER, 1, nullptr, GL_STATIC_DRAW);
+				it.draw_size = 0;
+				it.update = false;
+				it.finished = false;
+				it.wrong = true;
 			}
 		}
 		if (it.check_draw && it.draw_size > 0)
 		{
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, it.VBO);
-			glVertexAttribPointerARB(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
-			glEnableVertexAttribArrayARB(0);
+			glBindBuffer(GL_ARRAY_BUFFER, it.VBO);
+			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
+			glEnableVertexAttribArray(0);
 			mainShader->setUniform2f("u_windowSize", w_sizex, w_sizey);
 			mainShader->setUniform2f("u_origin", (float)origin_x * (scale[0] - ((int)scale[0] / 10) * 10 + 1), (float)origin_y * (scale[0] - ((int)scale[0] / 10) * 10 + 1));
 
@@ -572,7 +580,7 @@ void Renderer::GetGraphData(GraphVariable* it)
 		it->in_progress = false;
 		return;
 	}
-	int op_index = 0;
+	int op_index = -1;
 	if (operands.size() != 0)
 		for(int index = 0; index < operands.size(); index++)
 			if (operands[index].operand == "x")
@@ -581,14 +589,14 @@ void Renderer::GetGraphData(GraphVariable* it)
 				break;
 			}
 
-	float mult_x = pow(10, scale[0] / 10);
+	float mult_x = powf(10, scale[0] / 10);
 	float pos = w_sizex * 4;
 	for (float i = (-pos - origin_x) / mult_x; i < (pos - origin_x) / mult_x; i += 1 / mult_x)
 	{
-		if (glfwGetTime() >= time + 5)
+		if (glfwGetTime() >= time + 10)
 			break;
 		int errorcheck = 0;
-		if (operands.size() != 0)
+		if (operands.size() != 0 && op_index >= 0)
 			operands[op_index].value = i;
 		float val = e_evaluate(tokens, operands, errorcheck);
 		if (errorcheck == 0)
@@ -599,6 +607,18 @@ void Renderer::GetGraphData(GraphVariable* it)
 			it->data.push_back(val);
 			it->wrong = false;
 		}
+		else if (errorcheck == 6)
+		{
+			if (operands.size() != 0 && op_index >= 0)
+				operands[op_index].value = i - 1.0 / mult_x;
+			val = e_evaluate(tokens, operands, errorcheck);
+			if (errorcheck != 6)
+			{
+				it->wrong = false;
+			}
+			else
+				it->wrong = true;
+		}
 		else
 		{
 			it->wrong = true;
@@ -606,6 +626,7 @@ void Renderer::GetGraphData(GraphVariable* it)
 			return;
 		}
 	}
+	it->in_progress = false;
 	it->finished = true;
 }
 
@@ -643,12 +664,9 @@ void Renderer::imgui_graphs_menu()
 			else
 				ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(40, 255, 130, 255));
 
-			if (ImGui::InputText("##Function", &it.function, ImGuiInputTextFlags_AutoSelectAll))
+			if (ImGui::InputText("##Function", &it.function))
 			{
-				if (selected_graph == tempLoopCounter)
-					selected_graph = -1;
-				else
-					selected_graph = tempLoopCounter;
+				selected_graph = tempLoopCounter;
 				int error;
 				it.tokens = e_compile(it.function, error);
 				it.operands = e_get_operands(it.tokens);
@@ -670,7 +688,7 @@ void Renderer::imgui_graphs_menu()
 					selected_graph = -1;
 				else if(selected_graph > tempLoopCounter)
 					selected_graph--;
-				glDeleteBuffersARB(1, &graphs[tempLoopCounter].VBO);
+				glDeleteBuffers(1, &graphs[tempLoopCounter].VBO);
 				graphs.erase(graphs.begin() + tempLoopCounter);
 			}
 			ImGui::Dummy(ImVec2(0.0f, 0.1f));
@@ -699,7 +717,7 @@ void Renderer::imgui_graphs_menu()
 			tempPush.tokens = e_compile(tempPush.function, error);
 			tempPush.operands = e_get_operands(tempPush.tokens);
 			tempPush.operands_copy = tempPush.operands;
-			glGenBuffersARB(1, &tempPush.VBO);
+			glGenBuffers(1, &tempPush.VBO);
 			graphs.push_back(tempPush);
 		}
 		ImGui::PopStyleColor();

@@ -1,8 +1,6 @@
-#version 110
-#extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_separate_shader_objects : enable
+#version 330 core
 
-layout(location = 0) varying out vec4 color;
+layout(location = 0) out vec4 color;
        
 uniform vec3 u_color;
 

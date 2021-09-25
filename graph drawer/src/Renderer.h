@@ -46,7 +46,6 @@ private:
 	float font_color[3] = { 0.4f, 0.4f, 0.4f };
 	float fontScale[2] = { 0.25f, 0.4f };
 	bool draw_grid = true;
-	int lines = 10;
 	bool MSAA = true;
 	bool multi_threading = true;
 	bool lock_scale = true;
