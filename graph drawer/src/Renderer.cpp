@@ -331,6 +331,11 @@ void Renderer::Draw()
 				//	theme_generator();
 				//	ImGui::EndTabItem();
 				//}
+				if (ImGui::BeginTabItem("Info"))
+				{
+					imgui_info_menu();
+					ImGui::EndTabItem();
+				}
 				ImGui::EndTabBar();
 			}
 
@@ -760,7 +765,6 @@ void Renderer::imgui_graphs_menu()
 
 void Renderer::imgui_settings_menu()
 {
-	// other
 	if (ImGui::ColorEdit3("Background Color", bg_color, ImGuiColorEditFlags_Float));
 	if (ImGui::ColorEdit3("Grid Color", grid_color, ImGuiColorEditFlags_Float));
 	if (ImGui::ColorEdit3("Font Color", font_color, ImGuiColorEditFlags_Float));
@@ -785,6 +789,34 @@ void Renderer::imgui_settings_menu()
 		scale[0] = 20;
 		scale[1] = 20;
 	}
+}
+
+void Renderer::imgui_info_menu()
+{
+	std::string operator_list[] = {
+	"+    = a + b      ",  
+	"-    = a - b      ",  
+	"*    = a * b      ",  
+	"/    = a : b      ",  
+	"^    = a ^ b      ",  
+	"$    = a ^ (1 : b)",  
+	"%%    = a %% b    ",  
+	"abs  = |a|        ",
+	"sin  = sin(a)     ",
+	"asin = asin(a)    ",
+	"cos  = cos(a)     ",
+	"acos = acos(a)    ",
+	"tan  = tan(a)     ",
+	"atan = atan(a)    "
+	};
+	for (int i = 0; i < 14; i++)
+	{
+		bool temp = false;
+		if(ImGui::Selectable("##hover", &temp, ImGuiSelectableFlags_AllowItemOverlap, ImVec2(200, 15)));
+		ImGui::SameLine(6);
+		ImGui::Text(operator_list[i].c_str());
+	}
+
 }
 
 void Renderer::cursor_position_callback(GLFWwindow* window, double x, double y)

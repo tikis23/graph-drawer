@@ -67,7 +67,7 @@ private:
 	void GetGraphData(GraphVariable* it);
 	void imgui_graphs_menu();
 	void imgui_settings_menu();
-
+	void imgui_info_menu();
 
 	int w_sizex = 0;
 	int w_sizey = 0;
