@@ -19,6 +19,7 @@ public:
 	float GetWidth()const;
 	float GetHeight()const;
 private:
+	static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
 private:
 	GLFWwindow* handle;

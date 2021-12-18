@@ -55,6 +55,7 @@ Program::~Program()
 
 int Program::mainLoop()
 {
+	GraphRenderer::CreateGraph("aaa", 0.8f, 0.f, 0.5f);
 	while (running)
 	{
 		// check if program should close
@@ -71,7 +72,6 @@ int Program::mainLoop()
 		CoordinateManager::Update();
 
 		// draw grid
-		GridRenderer::SetColor(Settings::gridColor[0], Settings::gridColor[1], Settings::gridColor[2]);
 		GridRenderer::GenerateGrid();
 		GridRenderer::RenderGrid();
 

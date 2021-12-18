@@ -4,11 +4,12 @@
 #include "WindowManager.h"
 #include "Input.h"
 #include "CoordinateManager.h"
+#include "Settings.h"
 
 void GridRenderer::RenderGrid()
 {
 	glBegin(GL_LINES);
-	glColor3f(color[0], color[1], color[2]);
+	glColor3f(Settings::gridColor[0], Settings::gridColor[1], Settings::gridColor[2]);
 	for (int i = 0; i < verticesVertical.size(); i++)
 	{
 		glVertex2f(verticesVertical[i], 1.0f);
@@ -40,7 +41,6 @@ void GridRenderer::GenerateGrid()
 		}
 	}
 	long long int snap = powl(10, exp-1) * firstDigit;
-
 
 	// generate vertical vertices
 	long long int x0 = CoordinateManager::ScreenToWorldX(0);
@@ -79,14 +79,5 @@ void GridRenderer::GenerateGrid()
 	}
 }
 
-void GridRenderer::SetColor(float r, float g, float b)
-{
-	color[0] = r;
-	color[1] = g;
-	color[2] = b;
-}
-
-
-float GridRenderer::color[3];
 std::vector<float> GridRenderer::verticesVertical;
 std::vector<float> GridRenderer::verticesHorizontal;

@@ -14,6 +14,16 @@ Window* WindowManager::GetWindow(std::string name)
 		return nullptr;
 }
 
+Window* WindowManager::GetWindow(GLFWwindow* window)
+{
+	for (auto& it : windows)
+	{
+		if (it.second->GetHandle() == window)
+			return it.second;
+	}
+	return nullptr;
+}
+
 void WindowManager::DeleteWindow(std::string name)
 {
 	if (windows.count(name) > 0)

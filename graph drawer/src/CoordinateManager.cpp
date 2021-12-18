@@ -89,8 +89,6 @@ void CoordinateManager::Update()
     }
 }
 
-
-
 long long int CoordinateManager::centerX = -400;
 long long int CoordinateManager::centerY = 0;
 long long int CoordinateManager::scaleLevel = 10000;
