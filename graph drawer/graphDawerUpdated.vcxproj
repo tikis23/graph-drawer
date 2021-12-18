@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{3c1242ad-70b1-4d11-8fed-ed653e6da839}</ProjectGuid>
-    <RootNamespace>graphdrawer</RootNamespace>
+    <ProjectGuid>{648299a4-20c0-4047-a90a-5dc9c1227faf}</ProjectGuid>
+    <RootNamespace>graphDawerUpdated</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -89,6 +89,7 @@
       <PreprocessorDefinitions>WIN32;GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,9 +107,10 @@
       <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -145,50 +147,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\e_eval\e_eval.cpp" />
-    <ClCompile Include="src\FontRenderer.cpp" />
-    <ClCompile Include="src\GraphDrawer.cpp" />
-    <ClCompile Include="src\imgui\imgui.cpp" />
-    <ClCompile Include="src\imgui\imgui_demo.cpp" />
-    <ClCompile Include="src\imgui\imgui_draw.cpp" />
-    <ClCompile Include="src\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\imgui\imgui_stdlib.cpp" />
-    <ClCompile Include="src\imgui\imgui_tables.cpp" />
-    <ClCompile Include="src\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\CoordinateManager.cpp" />
+    <ClCompile Include="src\GraphRenderer.cpp" />
+    <ClCompile Include="src\GridRenderer.cpp" />
+    <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Program.cpp" />
+    <ClCompile Include="src\Settings.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\e_eval\e_eval.h" />
-    <ClInclude Include="src\FontRenderer.h" />
-    <ClInclude Include="src\GraphDrawer.h" />
-    <ClInclude Include="src\imgui\imconfig.h" />
-    <ClInclude Include="src\imgui\imgui.h" />
-    <ClInclude Include="src\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="src\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="src\imgui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="src\imgui\imgui_internal.h" />
-    <ClInclude Include="src\imgui\imgui_stdlib.h" />
-    <ClInclude Include="src\imgui\imstb_rectpack.h" />
-    <ClInclude Include="src\imgui\imstb_textedit.h" />
-    <ClInclude Include="src\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\stb\stb_image.h" />
+    <ClInclude Include="src\CoordinateManager.h" />
+    <ClInclude Include="src\GraphRenderer.h" />
+    <ClInclude Include="src\GridRenderer.h" />
+    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Program.h" />
+    <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\shaders\font.fs" />
-    <None Include="res\shaders\font.vs" />
-    <None Include="res\shaders\grid.fs" />
-    <None Include="res\shaders\grid.vs" />
-    <None Include="res\shaders\main.fs" />
-    <None Include="res\shaders\main.vs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\fonts\FontDefault.bmp" />
+    <ClInclude Include="src\WindowManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

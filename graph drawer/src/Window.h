@@ -1,30 +1,28 @@
 #pragma once
 #include <GLFW/glfw3.h>
 #include <string>
-#include <vector>
 
-#define WINDOW_WINDOWED   0
-#define WINDOW_FULLSCREEN 1
-#define WINDOW_BORDERLESS 2
+enum WINDOWMODE
+{
+	WINDOWED, FULLSCREEN, FULLSCREEN_WINDOWED
+};
 
 class Window
 {
 public:
-	Window(int width, int height, std::string title, int mode);
+	Window(int w_width, int w_height, std::string w_title, WINDOWMODE w_mode);
 	~Window();
-
-	void MakeCurrent();
-	void SetVSync(int mode);
+	GLFWwindow* GetHandle()const;
+	void MakeContextCurrent();
 	void Update();
-public:
-	GLFWwindow* GetHandle() const { return handle; };
-	void GetSize(int* width, int* height) const { glfwGetFramebufferSize(handle, width, height); };
-	float GetAspectRatio()const { int width; int height; glfwGetFramebufferSize(handle, &width, &height); if (height != 0)return (float)width / height; else return 0; };
-	bool IsInFocus()const { return glfwGetWindowAttrib(handle, GLFW_FOCUSED); };
+	void SetVsync(int val);
+	float GetWidth()const;
+	float GetHeight()const;
 private:
-	static void Framebuffer_callback(GLFWwindow* window, int width, int height);
 
 private:
-	GLFWwindow* handle; 
+	GLFWwindow* handle;
+	int width, height;
 	std::string title;
+	WINDOWMODE mode;
 };

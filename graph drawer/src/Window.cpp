@@ -1,16 +1,22 @@
 #include "Window.h"
-
-Window::Window(int width, int height, std::string title, int mode)
+#include <Windows.h>
+Window::Window(int w_width, int w_height, std::string w_title, WINDOWMODE w_mode)
 {
-    this->title = title;
+	width = w_width;
+	height = w_height;
+	title = w_title;
+	mode = w_mode;
 	const GLFWvidmode* monitorMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	if(mode == WINDOW_FULLSCREEN)
+
+	if (mode == WINDOWMODE::FULLSCREEN)
 		handle = glfwCreateWindow(width, height, title.c_str(), glfwGetPrimaryMonitor(), NULL);
-	else if (mode == WINDOW_BORDERLESS)
+	else if (mode == WINDOWMODE::FULLSCREEN_WINDOWED)
 		handle = glfwCreateWindow(monitorMode->width, monitorMode->height, title.c_str(), glfwGetPrimaryMonitor(), NULL);
-	else if (mode == WINDOW_WINDOWED)
+	else if(mode == WINDOWMODE::WINDOWED)
 		handle = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-    glfwSetFramebufferSizeCallback(handle, Framebuffer_callback);
+
+	if (!handle)
+		MessageBoxA(0, "Could not create window", "GLFW error", MB_OK);
 }
 
 Window::~Window()
@@ -18,23 +24,34 @@ Window::~Window()
 	glfwDestroyWindow(handle);
 }
 
-void Window::MakeCurrent()
+GLFWwindow* Window::GetHandle() const
+{
+	return handle;
+}
+
+void Window::MakeContextCurrent()
 {
 	glfwMakeContextCurrent(handle);
 }
 
 void Window::Update()
 {
-    glfwSwapBuffers(handle);
+	glfwSwapBuffers(handle);
 	glfwPollEvents();
 }
 
-void Window::SetVSync(int mode)
+void Window::SetVsync(int val)
 {
-	glfwSwapInterval(mode);
+	glfwSwapInterval(val);
 }
 
-void Window::Framebuffer_callback(GLFWwindow* window, int width, int height)
+float Window::GetWidth() const
 {
-    glViewport(0, 0, width, height);
+	return width;
 }
+
+float Window::GetHeight() const
+{
+	return height;
+}
+
