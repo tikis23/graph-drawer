@@ -38,7 +38,6 @@ void Window::MakeContextCurrent()
 void Window::Update()
 {
 	glfwSwapBuffers(handle);
-	glfwPollEvents();
 }
 
 void Window::SetVsync(int val)
@@ -56,11 +55,26 @@ float Window::GetHeight() const
 	return height;
 }
 
+int Window::GetPosX() const
+{
+	int xpos, ypos;
+	glfwGetWindowPos(handle, &xpos, &ypos);
+	return xpos;
+}
+
+int Window::GetPosY() const
+{
+	int xpos, ypos;
+	glfwGetWindowPos(handle, &xpos, &ypos);
+	return ypos;
+}
+
 void Window::framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
 	Window* win = WindowManager::GetWindow(window);
 	win->width = width;
 	win->height = height;
+	win->MakeContextCurrent();
 	glViewport(0, 0, width, height);
 }
 

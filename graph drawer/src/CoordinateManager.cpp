@@ -3,7 +3,7 @@
 #include "Input.h"
 #include "WindowManager.h"
 #include "Settings.h"
-
+#include <iostream>
 long long int CoordinateManager::GetCenterX()
 {
     return centerX;
@@ -61,11 +61,11 @@ void CoordinateManager::Update()
     {
         long long int panDiffX = panX - panOldX;
         long long int panDiffY = panY - panOldY;
-        centerX -= panDiffX * Settings::globalScale;
-        centerY -= panDiffY * Settings::globalScale;
+        centerX -= panDiffX * (double)(Settings::globalScale * Settings::panSpeed) * 0.1;
+        centerY -= panDiffY * (double)(Settings::globalScale * Settings::panSpeed) * 0.1;
     }
-    panOldX = panX;
-    panOldY = panY;
+    panOldX = ScreenToWorldX(tempX);
+    panOldY = ScreenToWorldY(tempY);
 
     // zooming
     if (Input::GetScrollOffsetY(window) != 0)
@@ -76,7 +76,7 @@ void CoordinateManager::Update()
         long long int oldMouseWorldY = ScreenToWorldY(tempY);
 
         // scale
-        scaleLevel -= (double)Input::GetScrollOffsetY(window) * scaleLevel * 0.01;
+        scaleLevel -= (double)Input::GetScrollOffsetY(window) * scaleLevel * (double)Settings::zoomSpeed * 0.001;
         if (scaleLevel < 10)
             scaleLevel = 10;
 

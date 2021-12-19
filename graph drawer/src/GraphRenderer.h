@@ -9,13 +9,16 @@ public:
 	static void CreateGraph(std::string function, float r, float g, float b);
 	static void RemoveGraph(int index);
 	static void ClearGraphs();
-private:
-	GraphRenderer();
+
 	struct Graph
 	{
-		std::string function;
+		bool active = true;
+		bool generate = true;
+		std::string function = "";
 		std::vector<float>points;
-		float color[3];
+		float color[3] = {1, 1, 1};
 	};
 	static std::vector<Graph>graphs;
+private:
+	GraphRenderer();
 };

@@ -18,6 +18,8 @@ public:
 	void SetVsync(int val);
 	float GetWidth()const;
 	float GetHeight()const;
+	int GetPosX()const;
+	int GetPosY()const;
 private:
 	static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 

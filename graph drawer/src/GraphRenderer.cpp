@@ -2,10 +2,13 @@
 #include <GL/glew.h>
 #include "WindowManager.h"
 #include "CoordinateManager.h"
+
 void GraphRenderer::RenderGraphs()
 {
 	for (int i = 0; i < graphs.size(); i++)
 	{
+		if (!graphs[i].active)
+			continue;
 		glBegin(GL_LINE_STRIP);
 		glColor3f(graphs[i].color[0], graphs[i].color[1], graphs[i].color[2]);
 		for (int j = 0; j < graphs[i].points.size(); j+=2)
@@ -18,16 +21,19 @@ void GraphRenderer::GenerateGraphs()
 {
 	for (int i = 0; i < graphs.size(); i++)
 	{
+		if (!graphs[i].generate)
+			continue;
 		graphs[i].points.clear();
 		for (int j = 0; j < WindowManager::GetWindow("main")->GetWidth(); j++)
 		{
 			long long int x = CoordinateManager::ScreenToWorldX(j);
 			long long int y = x * x;
 			float posx = CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(x));
-			float posy = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(y * 0.001));
+			float posy = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(y * 0.001 * 0 + 1000));
 			graphs[i].points.push_back(posx);
 			graphs[i].points.push_back(posy);
 		}
+		graphs[i].generate = false;
 	}
 }
 
