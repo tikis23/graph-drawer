@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "SEval/SEval.h"
 class GraphRenderer
 {
 public:
@@ -14,9 +15,13 @@ public:
 	{
 		bool active = true;
 		bool generate = true;
-		std::string function = "";
+		std::string function = "x*x";
 		std::vector<float>points;
 		float color[3] = {1, 1, 1};
+		//SEval
+		std::vector<SEval::token>functionTokens;
+		std::vector<SEval::operand>functionOperands;
+		int error = 0;
 	};
 	static std::vector<Graph>graphs;
 private:

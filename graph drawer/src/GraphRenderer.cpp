@@ -1,8 +1,8 @@
 #include "GraphRenderer.h"
 #include <GL/glew.h>
+#include <cmath>
 #include "WindowManager.h"
 #include "CoordinateManager.h"
-
 void GraphRenderer::RenderGraphs()
 {
 	for (int i = 0; i < graphs.size(); i++)
@@ -19,21 +19,46 @@ void GraphRenderer::RenderGraphs()
 
 void GraphRenderer::GenerateGraphs()
 {
-	for (int i = 0; i < graphs.size(); i++)
+	for (auto &graph : graphs)
 	{
-		if (!graphs[i].generate)
+		if (!graph.generate)
 			continue;
-		graphs[i].points.clear();
+		graph.points.clear();
+		graph.error = 0;
+		
+		// convert string function to tokens
+		graph.functionTokens = SEval::parseString(graph.function, &graph.error);
+		if (graph.error > 0)
+			continue;
+		graph.functionOperands = SEval::getOperands(graph.functionTokens);
+
+		// get index of x operand
+		int xIndex = -1;
+		for (int k = 0; k < graph.functionOperands.size(); k++)
+		{
+			if (graph.functionOperands[k].symbol == 'x')
+			{
+				xIndex = k;
+				break;
+			}
+		}
+
+		// generate points
 		for (int j = 0; j < WindowManager::GetWindow("main")->GetWidth(); j++)
 		{
-			long long int x = CoordinateManager::ScreenToWorldX(j);
-			long long int y = x * x;
-			float posx = CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(x));
-			float posy = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(y * 0.001 * 0 + 1000));
-			graphs[i].points.push_back(posx);
-			graphs[i].points.push_back(posy);
+			double x = CoordinateManager::ScreenToWorldX(j);
+			if(xIndex >= 0)
+				graph.functionOperands[xIndex].value = x;
+			int error = 0;
+			double y = SEval::evaluate(graph.functionTokens, graph.functionOperands, &error);
+			if (error > 0 || !std::isfinite(y))
+				continue;
+			float posx = CoordinateManager::ScreenNormalizedX(j);
+			float posy = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(y));
+			graph.points.push_back(posx);														 
+			graph.points.push_back(posy);
 		}
-		graphs[i].generate = false;
+		graph.generate = false;
 	}
 }
 

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 class ImGuiManager
 {
 public:
@@ -11,4 +11,5 @@ private:
 	ImGuiManager();
 	static bool hovered;
 	static int selected;
+	static std::string info[];
 };

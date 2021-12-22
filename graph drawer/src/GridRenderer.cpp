@@ -30,8 +30,8 @@ void GridRenderer::GenerateGrid()
 
 	// calculate snap point
 	int snapPoints[] = { 1, 2, 5 };
-	long long int exp = log10(CoordinateManager::GetScaleLevel());
-	long long int firstDigit = CoordinateManager::GetScaleLevel() / powl(10, exp);
+	double exp = log10(CoordinateManager::GetScaleLevel());
+	int firstDigit = CoordinateManager::GetScaleLevel() / pow(10, floor(exp));
 	for (int i = 2; i >= 0; i--)
 	{
 		if (firstDigit >= snapPoints[i])
@@ -40,43 +40,39 @@ void GridRenderer::GenerateGrid()
 			break;
 		}
 	}
-	long long int snap = powl(10, exp-1) * firstDigit;
+	double snap = powl(10, floor(exp) - 1) * firstDigit;
 
 	// generate vertical vertices
-	long long int x0 = CoordinateManager::ScreenToWorldX(0);
-	long long int x1 = CoordinateManager::ScreenToWorldX(WindowManager::GetWindow("main")->GetWidth());
+	double x0 = CoordinateManager::ScreenToWorldX(0);
+	double x1 = CoordinateManager::ScreenToWorldX(WindowManager::GetWindow("main")->GetWidth());
 	x0 = floor(x0 / snap) - 1;
 	x0 *= snap;
-	for (long long int i = x0; i < x1; i += snap)
+	for (double i = x0; i < x1; i += snap)
 	{
 		float pos = CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(i));
 		verticesVertical.push_back(pos);
-		if (i == 0)
-		{
-			pos = CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(i)+1);
-			verticesVertical.push_back(pos);
-			pos = CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(i)-1);
-			verticesVertical.push_back(pos);
-		}
 	}
 
 	// generate horizontal vertices
-	long long int y0 = CoordinateManager::ScreenToWorldY(0);
-	long long int y1 = CoordinateManager::ScreenToWorldY(WindowManager::GetWindow("main")->GetHeight());
+	double y0 = CoordinateManager::ScreenToWorldY(0);
+	double y1 = CoordinateManager::ScreenToWorldY(WindowManager::GetWindow("main")->GetHeight());
 	y0 = floor(y0 / snap) - 1;
 	y0 *= snap;
-	for (long long int i = y0; i < y1; i += snap)
+	for (double i = y0; i < y1; i += snap)
 	{
 		float pos = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(i));
 		verticesHorizontal.push_back(pos);
-		if (i == 0)
-		{
-			pos = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(i)+1);
-			verticesHorizontal.push_back(pos);
-			pos = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(i)-1);
-			verticesHorizontal.push_back(pos);
-		}
 	}
+
+	// generate thick lines at (0;0)
+	// x
+	verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0)));
+	verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0) + 1));
+	verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0) - 1));
+	// y
+	verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0)));
+	verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) + 1));
+	verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) - 1));
 }
 
 std::vector<float> GridRenderer::verticesVertical;

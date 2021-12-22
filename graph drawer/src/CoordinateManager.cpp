@@ -3,38 +3,39 @@
 #include "Input.h"
 #include "WindowManager.h"
 #include "Settings.h"
-#include <iostream>
-long long int CoordinateManager::GetCenterX()
+#include "GraphRenderer.h"
+
+double CoordinateManager::GetCenterX()
 {
     return centerX;
 }
 
-long long int CoordinateManager::GetCenterY()
+double CoordinateManager::GetCenterY()
 {
     return centerY;
 }
 
-long long int CoordinateManager::GetScaleLevel()
+double CoordinateManager::GetScaleLevel()
 {
     return scaleLevel;
 }
 
-long long int CoordinateManager::ScreenToWorldX(int screenX)
+double CoordinateManager::ScreenToWorldX(int screenX)
 {
     return (centerX + (-scaleLevel + ((scaleLevel + scaleLevel) / (WindowManager::GetWindow("main")->GetWidth())) * (screenX))) / Settings::globalScale;
 }
 
-long long int CoordinateManager::ScreenToWorldY(int screenY)
+double CoordinateManager::ScreenToWorldY(int screenY)
 {
     return (centerY + (-scaleLevel + ((scaleLevel + scaleLevel) / (WindowManager::GetWindow("main")->GetHeight())) * (screenY))) / Settings::globalScale;
 }
 
-int CoordinateManager::WorldToScreenX(long long int worldX)
+int CoordinateManager::WorldToScreenX(double worldX)
 {
     return (WindowManager::GetWindow("main")->GetWidth() / ((centerX + scaleLevel) - (centerX - scaleLevel))) * (Settings::globalScale * worldX - (centerX - scaleLevel));
 }
 
-int CoordinateManager::WorldToScreenY(long long int worldY)
+int CoordinateManager::WorldToScreenY(double worldY)
 {
     return (WindowManager::GetWindow("main")->GetHeight() / ((centerY + scaleLevel) - (centerY - scaleLevel))) * (Settings::globalScale * worldY - (centerY - scaleLevel));
 }
@@ -55,14 +56,16 @@ void CoordinateManager::Update()
     // panning
     int tempX, tempY;
     Input::GetMousePosition(window, tempX, tempY);
-    long long panX = ScreenToWorldX(tempX);
-    long long panY = ScreenToWorldY(tempY);
     if (Input::GetMouseButton(window, Input::Mouse::LEFT, Input::Action::HOLD))
     {
-        long long int panDiffX = panX - panOldX;
-        long long int panDiffY = panY - panOldY;
-        centerX -= panDiffX * (double)(Settings::globalScale * Settings::panSpeed) * 0.1;
-        centerY -= panDiffY * (double)(Settings::globalScale * Settings::panSpeed) * 0.1;
+        double panX = ScreenToWorldX(tempX);
+        double panY = ScreenToWorldY(tempY);
+        double panDiffX = panX - panOldX;
+        double panDiffY = panY - panOldY;
+        centerX -= panDiffX * Settings::globalScale * Settings::panSpeed * 0.1;
+        centerY -= panDiffY * Settings::globalScale * Settings::panSpeed * 0.1;
+        for (auto& it : GraphRenderer::graphs)
+            it.generate = true;
     }
     panOldX = ScreenToWorldX(tempX);
     panOldY = ScreenToWorldY(tempY);
@@ -72,25 +75,25 @@ void CoordinateManager::Update()
     {
         // check for offset
         Input::GetMousePosition(window, tempX, tempY);
-        long long int oldMouseWorldX = ScreenToWorldX(tempX);
-        long long int oldMouseWorldY = ScreenToWorldY(tempY);
+        double oldMouseWorldX = ScreenToWorldX(tempX);
+        double oldMouseWorldY = ScreenToWorldY(tempY);
 
         // scale
         scaleLevel -= (double)Input::GetScrollOffsetY(window) * scaleLevel * (double)Settings::zoomSpeed * 0.001;
-        if (scaleLevel < 10)
-            scaleLevel = 10;
 
         // remove offset
         Input::GetMousePosition(window, tempX, tempY);
-        long long int mouseWorldX = ScreenToWorldX(tempX);
-        long long int mouseWorldY = ScreenToWorldY(tempY);
+        double mouseWorldX = ScreenToWorldX(tempX);
+        double mouseWorldY = ScreenToWorldY(tempY);
         centerX += oldMouseWorldX - mouseWorldX;
         centerY += oldMouseWorldY - mouseWorldY;
+        for (auto& it : GraphRenderer::graphs)
+            it.generate = true;
     }
 }
 
-long long int CoordinateManager::centerX = -400;
-long long int CoordinateManager::centerY = 0;
-long long int CoordinateManager::scaleLevel = 10000;
-long long int CoordinateManager::panOldX;
-long long int CoordinateManager::panOldY;
+double CoordinateManager::centerX = 0;
+double CoordinateManager::centerY = 0;
+double CoordinateManager::scaleLevel = 10;
+double CoordinateManager::panOldX;
+double CoordinateManager::panOldY;

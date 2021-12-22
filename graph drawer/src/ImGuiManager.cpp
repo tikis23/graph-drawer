@@ -75,7 +75,9 @@ void ImGuiManager::CreateMenu()
 						// function input
 						ImGui::SameLine();
 						if (ImGui::InputText("##function", &GraphRenderer::graphs[i].function, ImGuiInputTextFlags_CallbackAlways))
+						{
 							GraphRenderer::graphs[i].generate = true;
+						}
 
 						// color
 						ImGui::SameLine();
@@ -133,7 +135,9 @@ void ImGuiManager::CreateMenu()
 			// info tab
 			if(ImGui::BeginTabItem("Info"))
 			{
-
+				// print out info
+				for (int i = 0; i < 31; i++)
+					ImGui::Selectable(info[i].c_str());
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
@@ -162,3 +166,37 @@ void ImGuiManager::Render()
 
 bool ImGuiManager::hovered = false;
 int ImGuiManager::selected = -1;
+std::string ImGuiManager::info[] =
+{
+	"",
+	"Currently supported operations",
+	"",
+	"Operators:", 
+	"	a + b    | ",
+	"	a - b    | ",
+	"	a * b    | ",
+	"	a / b    | ",
+	"	a % b    | ",
+	"	a $ b    | a - exponent ; b - number",
+	"	a ^ b    | a - number   ; b - exponent",
+	"	a l b    | a - log base ; b - number",
+	"",
+	"Functions:",
+	"    sin(a)   | a - radians",
+	"    asin(a)  | a - radians",
+	"    cos(a)   | a - radians",
+	"    acos(a)  | a - radians",
+	"    tan(a)   | a - radians",
+	"    atan(a)  | a - radians",
+	"    ctg(a)   | a - radians",
+	"    actg(a)  | a - radians",
+	"    abs(a)   | |a|",
+	"    dtr(a)   | a degrees to radians",
+	"    rtd(a)   | a radians to degrees",
+	"    floor(a) | ",
+	"    ceil(a)  | ",
+	"",
+	"Constants:",
+	"    pi - 3.14159265358979323846",
+	"    e  - 2.71828182845904523536"
+};
