@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "CoordinateManager.h"
 #include "Settings.h"
+#include "FontRenderer.h"
 
 void GridRenderer::RenderGrid()
 {
@@ -41,6 +42,11 @@ void GridRenderer::GenerateGrid()
 		}
 	}
 	double snap = powl(10, floor(exp) - 1) * firstDigit;
+	int eraseIndex = abs(floor(log10(snap)));
+
+	// font variables
+	float fontClipX = -1.0f + 2.0f / WindowManager::GetWindow("main")->GetWidth() * 20;
+	float fontClipY = -1.0f + 2.0f / WindowManager::GetWindow("main")->GetHeight() * 20;
 
 	// generate vertical vertices
 	double x0 = CoordinateManager::ScreenToWorldX(0);
@@ -49,8 +55,25 @@ void GridRenderer::GenerateGrid()
 	x0 *= snap;
 	for (double i = x0; i < x1; i += snap)
 	{
+		// calculate screen pos
 		float pos = CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(i));
 		verticesVertical.push_back(pos);
+
+		// get glyph
+		if (!(i + snap * 0.1 > 0 && i - snap * 0.1 < 0))
+		{
+			std::string numString = std::to_string(i);
+			int decimalIndex = numString.find('.');
+			if (exp >= 1)
+				numString.erase(numString.begin() + decimalIndex, numString.end());
+			else
+			{
+				if(eraseIndex + decimalIndex + 1 < numString.size())
+					numString.erase(numString.begin() + eraseIndex + decimalIndex + 1, numString.end());
+			}
+			if (pos > fontClipX)
+				FontRenderer::AddToRenderQueue(numString, pos, -1);
+		}
 	}
 
 	// generate horizontal vertices
@@ -62,17 +85,45 @@ void GridRenderer::GenerateGrid()
 	{
 		float pos = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(i));
 		verticesHorizontal.push_back(pos);
+
+		// get glyph
+		if (!(i + snap * 0.1 > 0 && i - snap * 0.1 < 0))
+		{
+			std::string numString = std::to_string(i);
+			int decimalIndex = numString.find('.');
+			if (exp >= 1)
+				numString.erase(numString.begin() + decimalIndex, numString.end());
+			else
+			{
+				if (eraseIndex + decimalIndex + 1 < numString.size())
+					numString.erase(numString.begin() + eraseIndex + decimalIndex + 1, numString.end());
+			}
+			if (pos > fontClipX)
+				FontRenderer::AddToRenderQueue(numString, -1, pos);
+		}
 	}
 
 	// generate thick lines at (0;0)
 	// x
-	verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0)));
-	verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0) + 1));
-	verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0) - 1));
+	float posX = CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0) + 1);
+	if (posX > -1 && posX < 1)
+	{
+		verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0)));
+		verticesVertical.push_back(posX);
+		verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0) - 1));
+		if (posX > fontClipX)
+			FontRenderer::AddToRenderQueue("0", posX, -1);
+	}
 	// y
-	verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0)));
-	verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) + 1));
-	verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) - 1));
+	float posY = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) + 1);
+	if (posY > -1 && posY < 1)
+	{
+		verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0)));
+		verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) + 1));
+		verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) - 1));
+		if (posY > fontClipY)
+			FontRenderer::AddToRenderQueue("0", -1, posY);
+	}
 }
 
 std::vector<float> GridRenderer::verticesVertical;

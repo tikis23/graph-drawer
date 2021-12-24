@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CoordinateManager.cpp" />
+    <ClCompile Include="src\FontRenderer.cpp" />
     <ClCompile Include="src\GraphRenderer.cpp" />
     <ClCompile Include="src\GridRenderer.cpp" />
     <ClCompile Include="src\ImGuiManager.cpp" />
@@ -163,11 +164,13 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="src\Settings.cpp" />
+    <ClCompile Include="src\SEval\SEval.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CoordinateManager.h" />
+    <ClInclude Include="src\FontRenderer.h" />
     <ClInclude Include="src\GraphRenderer.h" />
     <ClInclude Include="src\GridRenderer.h" />
     <ClInclude Include="src\ImGuiManager.h" />
@@ -183,6 +186,8 @@
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Program.h" />
     <ClInclude Include="src\Settings.h" />
+    <ClInclude Include="src\SEval\SEval.h" />
+    <ClInclude Include="src\stb\stb_image.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\WindowManager.h" />
   </ItemGroup>

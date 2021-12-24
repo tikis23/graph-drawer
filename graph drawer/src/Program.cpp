@@ -1,15 +1,16 @@
 #include "Program.h"
 #include "WindowManager.h"
 
-#include <stdexcept>
 #include <string>
 
 #include "Input.h"
 #include "CoordinateManager.h"
 #include "GridRenderer.h"
 #include "GraphRenderer.h"
+#include "FontRenderer.h"
 #include "Settings.h"
 #include "ImGuiManager.h"
+
 
 void error_callback(int error, const char* msg) {
 	std::string s;
@@ -41,17 +42,23 @@ Program::Program()
 	WindowManager::GetWindow("child")->SetVsync(1);
 	ImGuiManager::Init();
 
-	// set input window
-	WindowManager::GetWindow("main")->MakeContextCurrent();
-	Input::AddWindow(WindowManager::GetWindow("main")->GetHandle());
-
 	// init glew
 	if (glewInit() != GLEW_OK)
 	{
 		running = false;
 		MessageBoxA(0, "GLEWInit != GLEW_OK", "GLEW error", MB_OK);
 	}
+
+	// set input window
+	WindowManager::GetWindow("main")->MakeContextCurrent();
+	Input::AddWindow(WindowManager::GetWindow("main")->GetHandle());
+
+	// load font
+	FontRenderer::LoadFont("./fonts/font.bmp");
+
 	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	mainLoop();
 }
 
@@ -94,6 +101,9 @@ int Program::mainLoop()
 		// draw graphs
 		GraphRenderer::GenerateGraphs();
 		GraphRenderer::RenderGraphs();
+
+		// draw font
+		FontRenderer::RenderFont();
 
 		// swap buffers and poll input
 		WindowManager::GetWindow("child")->MakeContextCurrent();

@@ -124,6 +124,7 @@ void ImGuiManager::CreateMenu()
 			{
 				ImGui::ColorEdit3("Background Color", Settings::backgroundColor, ImGuiColorEditFlags_NoOptions);
 				ImGui::ColorEdit3("Grid Color", Settings::gridColor, ImGuiColorEditFlags_NoOptions);
+				ImGui::ColorEdit3("Font Color", Settings::fontColor, ImGuiColorEditFlags_NoOptions);
 				ImGui::Checkbox("Draw Grid", &Settings::drawGrid);
 				ImGui::DragFloat("Scale", &Settings::globalScale, 0.01f);
 				if (Settings::globalScale < 0.2f)
