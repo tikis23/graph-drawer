@@ -17,6 +17,7 @@ void ImGuiManager::Init()
 	ImGui_ImplGlfw_InitForOpenGL(WindowManager::GetWindow("child")->GetHandle(), true);
 	ImGui_ImplOpenGL2_Init();
 	ImGui::GetIO().IniFilename = NULL;
+	SetStyle();
 }
 
 void ImGuiManager::Exit()
@@ -53,16 +54,19 @@ void ImGuiManager::CreateMenu()
 						bool hovered = false;
 						bool notClicked = true;
 						ImGui::Selectable("##hover", false, ImGuiSelectableFlags_AllowItemOverlap | ImGuiSelectableFlags_Disabled, { ImGui::GetWindowWidth() - 10, 20 });
-						ImU32 color = IM_COL32(50, 50, 50, 255);
+						ImU32 color = IM_COL32(90, 120, 120, 80);
+						// hovered
 						if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem | ImGuiHoveredFlags_AllowWhenDisabled))
 						{
 							hovered = true;
-							color *= 3;
+							color = IM_COL32(60, 120, 90, 180);
 						}
+						// selected
 						else if (selected == i)
-							color *= 2;
+							color = IM_COL32(60, 120, 90, 140);
+						// clicked
 						if (hovered && ImGui::IsMouseDown(0))
-							color *= 1.5f;
+							color = IM_COL32(60, 120, 90, 200);
 						float offset = ImGui::GetWindowPos().y + 5 + i * 20 + i * 9 - ImGui::GetScrollY();
 						ImGui::GetWindowDrawList()->AddRectFilled({ ImGui::GetWindowPos().x + 5, offset}, { ImGui::GetWindowWidth() - 10, offset + 25}, color, 3);
 
@@ -113,9 +117,28 @@ void ImGuiManager::CreateMenu()
 						GraphRenderer::CreateGraph("x*x", 0.5f, 0.5f, 0.5f);
 					ImGui::EndChild();
 				}
-				// current graph settings
-				{
 
+				// current graph operands
+				if (ImGui::BeginChild("##Operands", ImVec2{ ImGui::GetIO().DisplaySize.x - 16, ImGui::GetIO().DisplaySize.y - 342 }, true))
+				{
+					if (selected >= 0 && selected < GraphRenderer::graphs.size())
+					{
+						ImGui::Columns(2);
+						for (int i = 0; i < GraphRenderer::graphs[selected].functionOperands.size(); i++)
+						{
+							if (i == GraphRenderer::graphs[selected].functionOperands.size() / 2)
+								ImGui::NextColumn();
+							if (GraphRenderer::graphs[selected].functionOperands[i].symbol == 'x')
+								continue;
+							float temp = GraphRenderer::graphs[selected].functionOperands[i].value;
+							if (ImGui::DragFloat(&GraphRenderer::graphs[selected].functionOperands[i].symbol, &temp, 0.001f))
+							{
+								GraphRenderer::graphs[selected].functionOperands[i].value = temp;
+								GraphRenderer::graphs[selected].evaluate = true;
+							}
+						}
+					}
+					ImGui::EndChild();
 				}
 				ImGui::EndTabItem();
 			}		
@@ -141,6 +164,12 @@ void ImGuiManager::CreateMenu()
 					ImGui::Selectable(info[i].c_str());
 				ImGui::EndTabItem();
 			}
+
+			if (ImGui::BeginTabItem("debug"))
+			{
+				ImGui::ShowStyleEditor();
+				ImGui::EndTabItem();
+			}
 			ImGui::EndTabBar();
 		}
 
@@ -163,6 +192,34 @@ void ImGuiManager::Render()
 {
 	ImGui::Render();
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+}
+
+void ImGuiManager::SetStyle()
+{
+	auto &style = ImGui::GetStyle();
+
+	// frames
+	style.FrameRounding = 4;
+	style.FrameBorderSize = 1;
+	style.ChildRounding = 4;
+	
+	// colors
+	style.Colors[ImGuiCol_FrameBg]              = ImVec4(0.35f, 0.47f, 0.47f, 0.27f);
+	style.Colors[ImGuiCol_FrameBgHovered]       = ImVec4(0.35f, 0.47f, 0.47f, 0.78f);
+	style.Colors[ImGuiCol_FrameBgActive]        = ImVec4(0.35f, 0.47f, 0.47f, 0.39f);
+	style.Colors[ImGuiCol_CheckMark]            = ImVec4(0.23f, 0.47f, 0.35f, 1.00f);
+	style.Colors[ImGuiCol_Button]               = ImVec4(0.35f, 0.47f, 0.47f, 0.47f);
+	style.Colors[ImGuiCol_ButtonHovered]        = ImVec4(0.35f, 0.47f, 0.47f, 1.00f);
+	style.Colors[ImGuiCol_ButtonActive]         = ImVec4(0.35f, 0.47f, 0.47f, 1.00f);
+	style.Colors[ImGuiCol_Tab]                  = ImVec4(0.35f, 0.47f, 0.47f, 0.58f);
+	style.Colors[ImGuiCol_TabHovered]           = ImVec4(0.35f, 0.47f, 0.47f, 1.00f);
+	style.Colors[ImGuiCol_TabActive]            = ImVec4(0.35f, 0.47f, 0.47f, 0.86f);
+	style.Colors[ImGuiCol_ScrollbarGrab]        = ImVec4(0.35f, 0.47f, 0.47f, 0.58f);
+	style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.35f, 0.47f, 0.47f, 0.78f);
+	style.Colors[ImGuiCol_ScrollbarGrabActive]  = ImVec4(0.35f, 0.47f, 0.47f, 1.00f);	
+	style.Colors[ImGuiCol_Header]               = ImVec4(0.35f, 0.47f, 0.47f, 0.58f);
+	style.Colors[ImGuiCol_HeaderHovered]        = ImVec4(0.35f, 0.47f, 0.47f, 0.78f);
+	style.Colors[ImGuiCol_HeaderActive]         = ImVec4(0.35f, 0.47f, 0.47f, 1.00f);
 }
 
 bool ImGuiManager::hovered = false;

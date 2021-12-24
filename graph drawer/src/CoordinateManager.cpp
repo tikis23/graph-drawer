@@ -65,7 +65,7 @@ void CoordinateManager::Update()
         centerX -= panDiffX * Settings::globalScale * Settings::panSpeed * 0.1;
         centerY -= panDiffY * Settings::globalScale * Settings::panSpeed * 0.1;
         for (auto& it : GraphRenderer::graphs)
-            it.generate = true;
+            it.evaluate = true;
     }
     panOldX = ScreenToWorldX(tempX);
     panOldY = ScreenToWorldY(tempY);
@@ -88,7 +88,7 @@ void CoordinateManager::Update()
         centerX += oldMouseWorldX - mouseWorldX;
         centerY += oldMouseWorldY - mouseWorldY;
         for (auto& it : GraphRenderer::graphs)
-            it.generate = true;
+            it.evaluate = true;
     }
 }
 

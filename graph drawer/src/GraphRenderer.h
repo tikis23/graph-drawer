@@ -15,7 +15,8 @@ public:
 	{
 		bool active = true;
 		bool generate = true;
-		std::string function = "x*x";
+		bool evaluate = true;
+		std::string function = "";
 		std::vector<float>points;
 		float color[3] = {1, 1, 1};
 		//SEval

@@ -7,6 +7,7 @@ public:
 	static void Exit();
 	static void CreateMenu();
 	static void Render();
+	static void SetStyle();
 private:
 	ImGuiManager();
 	static bool hovered;
