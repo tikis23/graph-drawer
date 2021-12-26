@@ -131,7 +131,7 @@ void ImGuiManager::CreateMenu()
 							if (GraphRenderer::graphs[selected].functionOperands[i].symbol == 'x')
 								continue;
 							float temp = GraphRenderer::graphs[selected].functionOperands[i].value;
-							if (ImGui::DragFloat(&GraphRenderer::graphs[selected].functionOperands[i].symbol, &temp, 0.001f))
+							if (ImGui::DragFloat(std::string({ GraphRenderer::graphs[selected].functionOperands[i].symbol }).c_str(), &temp, 0.001f))
 							{
 								GraphRenderer::graphs[selected].functionOperands[i].value = temp;
 								GraphRenderer::graphs[selected].evaluate = true;
@@ -159,9 +159,24 @@ void ImGuiManager::CreateMenu()
 			// info tab
 			if(ImGui::BeginTabItem("Info"))
 			{
-				// print out info
-				for (int i = 0; i < 31; i++)
-					ImGui::Selectable(info[i].c_str());
+				if (ImGui::BeginTabBar("##infoTabs"))
+				{
+					if (ImGui::BeginTabItem("Operators"))
+					{
+						// print out infoOperations
+						for (int i = 0; i < 29; i++)
+							ImGui::Selectable(infoOperations[i].c_str());
+						ImGui::EndTabItem();
+					}
+					if (ImGui::BeginTabItem("Controls"))
+					{
+						// print out infoControls
+						for (int i = 0; i < 29; i++)
+							ImGui::Selectable(infoControls[i].c_str());
+						ImGui::EndTabItem();
+					}
+					ImGui::EndTabBar();
+				}
 				ImGui::EndTabItem();
 			}
 
@@ -224,10 +239,8 @@ void ImGuiManager::SetStyle()
 
 bool ImGuiManager::hovered = false;
 int ImGuiManager::selected = -1;
-std::string ImGuiManager::info[] =
+std::string ImGuiManager::infoOperations[] =
 {
-	"",
-	"Currently supported operations",
 	"",
 	"Operators:", 
 	"	a + b    | ",
@@ -257,4 +270,14 @@ std::string ImGuiManager::info[] =
 	"Constants:",
 	"    pi - 3.14159265358979323846",
 	"    e  - 2.71828182845904523536"
+};
+
+std::string ImGuiManager::infoControls[] =
+{
+
+	"",
+	"    Left-Click          | pan",
+	"    Scroll-Wheel        | zoom",
+	"    Right-Click         | point selection snapped",
+	"    Right-Click + Shift | point selection free",
 };

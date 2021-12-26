@@ -12,5 +12,6 @@ private:
 	ImGuiManager();
 	static bool hovered;
 	static int selected;
-	static std::string info[];
+	static std::string infoOperations[];
+	static std::string infoControls[];
 };

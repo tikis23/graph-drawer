@@ -10,7 +10,7 @@
 #include "FontRenderer.h"
 #include "Settings.h"
 #include "ImGuiManager.h"
-
+#include "PointSelector.h"
 
 void error_callback(int error, const char* msg) {
 	std::string s;
@@ -101,6 +101,16 @@ int Program::mainLoop()
 		// draw graphs
 		GraphRenderer::GenerateGraphs();
 		GraphRenderer::RenderGraphs();
+
+		// draw selected point
+		if (Input::GetMouseButton(WindowManager::GetWindow("main")->GetHandle(), Input::Mouse::RIGHT, Input::Action::HOLD))
+		{
+			// if SHIFT draw free else draw snapped
+			if (Input::GetKey(WindowManager::GetWindow("main")->GetHandle(), Input::Key::LEFT_SHIFT, Input::Action::HOLD))
+				PointSelector::DrawSelectedPoint();
+			else
+				PointSelector::DrawSelectedPointSnapped();
+		}
 
 		// draw font
 		FontRenderer::RenderFont();
