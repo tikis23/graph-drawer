@@ -72,7 +72,7 @@ void GridRenderer::GenerateGrid()
 					numString.erase(numString.begin() + eraseIndex + decimalIndex + 1, numString.end());
 			}
 			if (pos > fontClipX)
-				FontRenderer::AddToRenderQueue(numString, pos, -1);
+				FontRenderer::AddToRenderQueue(numString, CoordinateManager::WorldToScreenX(i), 0);
 		}
 	}
 
@@ -99,7 +99,7 @@ void GridRenderer::GenerateGrid()
 					numString.erase(numString.begin() + eraseIndex + decimalIndex + 1, numString.end());
 			}
 			if (pos > fontClipX)
-				FontRenderer::AddToRenderQueue(numString, -1, pos);
+				FontRenderer::AddToRenderQueue(numString, 0, CoordinateManager::WorldToScreenY(i));
 		}
 	}
 
@@ -112,17 +112,17 @@ void GridRenderer::GenerateGrid()
 		verticesVertical.push_back(posX);
 		verticesVertical.push_back(CoordinateManager::ScreenNormalizedX(CoordinateManager::WorldToScreenX(0) - 1));
 		if (posX > fontClipX)
-			FontRenderer::AddToRenderQueue("0", posX, -1);
+			FontRenderer::AddToRenderQueue("0", CoordinateManager::WorldToScreenX(0) + 1, 0);
 	}
 	// y
 	float posY = CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) + 1);
 	if (posY > -1 && posY < 1)
 	{
 		verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0)));
-		verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) + 1));
+		verticesHorizontal.push_back(posY);
 		verticesHorizontal.push_back(CoordinateManager::ScreenNormalizedY(CoordinateManager::WorldToScreenY(0) - 1));
 		if (posY > fontClipY)
-			FontRenderer::AddToRenderQueue("0", -1, posY);
+			FontRenderer::AddToRenderQueue("0", 0, CoordinateManager::WorldToScreenY(0) + 1);
 	}
 }
 

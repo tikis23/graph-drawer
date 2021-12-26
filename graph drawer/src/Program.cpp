@@ -54,7 +54,7 @@ Program::Program()
 	Input::AddWindow(WindowManager::GetWindow("main")->GetHandle());
 
 	// load font
-	FontRenderer::LoadFont("./fonts/font.bmp");
+	FontRenderer::LoadFont("./fonts/defaultFont/defaultFont.fnt");
 
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_BLEND);
