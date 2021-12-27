@@ -224,8 +224,9 @@ namespace SEval
 		// correction in tokens
 		for (int i = 0; i < tokens.size(); i++)
 		{
-			// if current token is operand or constant
-			if ((tokens[i].type == SEval::_internal_type::OPERAND || tokens[i].type == SEval::_internal_type::CONSTANT) && i + 1 < tokens.size())
+			// if current token is operand or constant or number
+			if ((tokens[i].type == SEval::_internal_type::OPERAND || tokens[i].type == SEval::_internal_type::CONSTANT 
+				|| tokens[i].type == SEval::_internal_type::NUMBER) && i + 1 < tokens.size())
 			{
 				// if next token is operand or constant or left bracket
 				if (tokens[i + 1].type == SEval::_internal_type::OPERAND || tokens[i + 1].type == SEval::_internal_type::CONSTANT

@@ -8,6 +8,7 @@ public:
 	static void CreateMenu();
 	static void Render();
 	static void SetStyle();
+	static std::string randomFunctions[];
 private:
 	ImGuiManager();
 	static bool hovered;

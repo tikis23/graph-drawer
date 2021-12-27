@@ -2,6 +2,7 @@
 #include "WindowManager.h"
 
 #include <string>
+#include <time.h>
 
 #include "Input.h"
 #include "CoordinateManager.h"
@@ -72,7 +73,12 @@ Program::~Program()
 
 int Program::mainLoop()
 {
-	GraphRenderer::CreateGraph("x", 0.8f, 0.f, 0.5f);
+	std::srand(time(NULL));
+	float r = (float)(std::rand() % 255) / 255;
+	float g = (float)(std::rand() % 255) / 255;
+	float b = (float)(std::rand() % 255) / 255;
+	std::string func = ImGuiManager::randomFunctions[std::rand() % 33];
+	GraphRenderer::CreateGraph(func, r, g, b);
 	while (running)
 	{
 		// check if program should close

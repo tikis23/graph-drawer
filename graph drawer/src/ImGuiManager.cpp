@@ -113,8 +113,14 @@ void ImGuiManager::CreateMenu()
 
 						ImGui::PopID();
 					}
-					if(ImGui::Button("New Graph"))
-						GraphRenderer::CreateGraph("x*x", 0.5f, 0.5f, 0.5f);
+					if (ImGui::Button("New Graph"))
+					{
+						float r = (float)(std::rand() % 255) / 255;
+						float g = (float)(std::rand() % 255) / 255;
+						float b = (float)(std::rand() % 255) / 255;
+						std::string func = randomFunctions[std::rand() % 33];
+						GraphRenderer::CreateGraph(func, r, g, b);
+					}
 					ImGui::EndChild();
 				}
 
@@ -171,7 +177,7 @@ void ImGuiManager::CreateMenu()
 					if (ImGui::BeginTabItem("Controls"))
 					{
 						// print out infoControls
-						for (int i = 0; i < 29; i++)
+						for (int i = 0; i < 5; i++)
 							ImGui::Selectable(infoControls[i].c_str());
 						ImGui::EndTabItem();
 					}
@@ -180,11 +186,6 @@ void ImGuiManager::CreateMenu()
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("debug"))
-			{
-				ImGui::ShowStyleEditor();
-				ImGui::EndTabItem();
-			}
 			ImGui::EndTabBar();
 		}
 
@@ -280,4 +281,41 @@ std::string ImGuiManager::infoControls[] =
 	"    Scroll-Wheel        | zoom",
 	"    Right-Click         | point selection snapped",
 	"    Right-Click + Shift | point selection free",
+};
+
+std::string ImGuiManager::randomFunctions[] =
+{
+	"x",
+	"5x",
+	"10x",
+	"x+5",
+	"x+10",
+	"5x+5",
+	"5x+10",
+	"10x+5",
+	"10x+10",
+	"x^2+x",
+	"x^2+x+5",
+	"2x^2+x",
+	"2x^2+x+5",
+	"2x^2+3x+5",
+	"10x^2+3x+5",
+	"x^3",
+	"5x^3",
+	"2$x",
+	"3$x",
+	"sin(x)",
+	"cos(x)",
+	"tan(x)",
+	"ctg(x)",
+	"asin(x)",
+	"acos(x)",
+	"atan(x)",
+	"actg(x)",
+	"10lx",
+	"10l(x^2)",
+	"2lx+5",
+	"7lx+x",
+	"5l(sin(x))",
+	"4l(3$x)"
 };
